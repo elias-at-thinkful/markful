@@ -1,9 +1,9 @@
-const templates = (function(){
-  
-  const _generateRating = function(num) {
+const templates = (function () {
+
+  const _generateRating = function (num) {
     const solid = '&#x2605';
     const hollow = '&#x2606';
-  
+
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= num) {
@@ -15,17 +15,23 @@ const templates = (function(){
     return stars.map(star => `<span>${star}</span>`).join('');
   };
 
-  const bookmark = function({ id, title, url, desc, rating }) {
+  const bookmark = function ({ id, expanded, title, url, desc, rating }) {
+    const article = expanded ? `
+      <p class="description">
+        ${desc}
+        <span class="site-link"><a href="${url}">Visit Site</a></span>
+      </p>
+    ` : '';
+
     return `
       <li class="bookmark-item" data-id="${id}">
-        <header>
-          <span class="header-text">${title}</span>
-        </header>
+        <a class="bookmark-header-link" href="#">
+          <header class="${expanded ? 'expanded' : ''}">
+            <span class="header-text">${title}</span>
+          </header>
+        </a>
         <article>
-          <p class="description">
-            ${desc}
-            <span class="site-link"><a href="${url}">Visit Site</a></span>
-          </p>
+          ${article}
         </article>
         <div class="rating">
           ${_generateRating(rating)}

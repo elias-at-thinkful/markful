@@ -18,12 +18,22 @@ li.bookmark-item:first {
   margin-top: 0;
 }
 
+a.bookmark-header-link {
+  text-decoration: none;
+  color: initial;
+}
+
 li.bookmark-item header {
   background-color: lightblue;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
   height: 45px;
   cursor: pointer;
+}
+
+li.bookmark-item header.expanded {
+  background-color: darkblue;
+  color: white;
 }
 
 p.description {

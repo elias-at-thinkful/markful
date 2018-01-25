@@ -1,2 +1,7 @@
-const els = store.bookmarks.map(b => templates.bookmark(b));
-$('.bookmarks').html(els);
+/* global bookmarkList */
+
+$(() => {
+  bookmarkList.bindEventListeners();
+  bookmarkList.render();
+});
+
