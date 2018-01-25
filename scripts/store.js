@@ -3,6 +3,9 @@ const store = (function(){
   const bookmarks = [
   ];
 
+  let adding = false;
+  let minimumRating = null;
+
   const _jsonToStore = function(bookmark) {
     return Object.assign(bookmark, { expanded: false });
   };
@@ -23,6 +26,9 @@ const store = (function(){
 
   return {
     bookmarks,
+    adding,
+    minimumRating,
+
     addBookmark,
     findBookmarkById,
     toggleBookmarkExpand,

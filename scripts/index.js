@@ -1,8 +1,8 @@
-/* global bookmarkList */
+/* global app, store */
 
 $(() => {
-  bookmarkList.bindEventListeners();
-  bookmarkList.render();
+  app.bindEventListeners();
+  app.render();
 });
 
 const mockData = [
