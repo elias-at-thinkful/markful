@@ -1,31 +1,16 @@
 const store = (function(){
 
   const bookmarks = [
-    {
-      title: 'Something',
-      url: 'http://example.com',
-      rating: 4,
-      desc: 'Lorem ipsum etc',
-      id: 1,
-      expanded: false,
-    },
-    {
-      title: 'Article on Cats',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium omnis reprehenderit beatae soluta sapiente optio repellat nulla ipsam, architecto harum in consectetur suscipit unde delectus atque. Ex a soluta eveniet?',
-      url: 'http://google.com',
-      rating: 3,
-      id: 2,
-      expanded: true,
-    },
-    {
-      title: "Naughty Bookmark I shouldn't bookmark",
-      url: 'http://bookmark.com',
-      rating: 5,
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium omnis reprehenderit beatae soluta sapiente optio repellat nulla ipsam, architecto harum in consectetur suscipit unde delectus atque. Ex a soluta eveniet?',
-      id: 3,
-      expanded: false,
-    },
   ];
+
+  const _jsonToStore = function(bookmark) {
+    return Object.assign(bookmark, { expanded: false });
+  };
+
+  const addBookmark = function(bookmarkJson) {
+    const bookmark = _jsonToStore(bookmarkJson);
+    this.bookmarks.push(bookmark);
+  };
 
   const findBookmarkById = function(id) {
     return this.bookmarks.find(b => b.id === id);
@@ -38,6 +23,7 @@ const store = (function(){
 
   return {
     bookmarks,
+    addBookmark,
     findBookmarkById,
     toggleBookmarkExpand,
   };
