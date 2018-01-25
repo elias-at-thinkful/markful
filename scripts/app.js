@@ -57,7 +57,6 @@ const app = (function(){
 
   const handleAllExceptBookmarkClick = function(e) {
     if (!$(e.target).closest('li.bookmark-item')[0]) {
-      console.log('wasn not bookmark');
       store.lastClickedBookmark = null;
     }
   };
@@ -101,7 +100,7 @@ const app = (function(){
     $('.bookmark-controls').on('change', '#rating-filter', handleChangeRatingFilter);
     $('.bookmark-controls').on('submit', '#add-bookmark-form', handleSubmitBookmark);
     $('.bookmarks').on('click', '.star-rating', handleSetRating);
-    $('body').on('click submit change', handleAllExceptBookmarkClick);
+    $('.bookmark-controls, .bookmarks-list').on('click submit', handleAllExceptBookmarkClick);
   };
 
   return {
