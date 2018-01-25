@@ -12,7 +12,11 @@ const templates = (function () {
         stars.unshift(hollow);
       }
     }
-    return stars.map(star => `<span>${star}</span>`).join('');
+
+    let counter = 5;
+    return stars.map(star => {
+      return `<span class="star-rating" data-rating="${counter--}">${star}</span>`;
+    }).join('');
   };
 
   const addBookmarkForm = function() {
@@ -75,7 +79,7 @@ const templates = (function () {
     ` : '';
 
     return `
-      <li class="bookmark-item" data-id="${id}">
+      <li class="bookmark-item" id="bookmark-${id}" data-id="${id}">
         <a class="bookmark-header-link" href="#">
           <header class="${expanded ? 'expanded' : ''}">
             <span class="header-text">${title}</span>

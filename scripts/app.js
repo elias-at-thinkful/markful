@@ -19,6 +19,7 @@ const app = (function(){
   const handleClickBookmark = function(e) {
     const id = $(e.target).closest('li').data('id');
     store.toggleBookmarkExpand(id);
+    store.lastClickedBookmark = id;
     render();
   };
 
@@ -46,6 +47,21 @@ const app = (function(){
     render();
   };
 
+  const handleSetRating = function(e) {
+    const id = $(e.target).closest('li').data('id');
+    const rating = $(e.target).data('rating');
+    store.updateBookmark(id, { rating });
+    store.lastClickedBookmark = id;
+    render();
+  };
+
+  const handleAllExceptBookmarkClick = function(e) {
+    if (!$(e.target).closest('li.bookmark-item')[0]) {
+      console.log('wasn not bookmark');
+      store.lastClickedBookmark = null;
+    }
+  };
+
   const _renderControls = function() {
     let el = templates.defaultControls(store.minimumRating);
 
@@ -64,11 +80,18 @@ const app = (function(){
 
     const els = viewBookmarks.map(b => templates.bookmark(b));
     $('.bookmarks').html(els);
+
+    setTimeout(() => {
+      if (store.lastClickedBookmark) {
+        const el = $(`.bookmark-item#bookmark-${store.lastClickedBookmark}`);
+        el[0].scrollIntoView({behavior: 'instant', block: 'start'});
+      }
+    }, 1);
   };
 
   const render = function() {
-    _renderBookmarkList();
     _renderControls();
+    _renderBookmarkList();
   };
 
   const bindEventListeners = function() {
@@ -77,6 +100,8 @@ const app = (function(){
     $('.bookmark-controls').on('click', '#cancel-add-form', handleCancelAddBookmark);
     $('.bookmark-controls').on('change', '#rating-filter', handleChangeRatingFilter);
     $('.bookmark-controls').on('submit', '#add-bookmark-form', handleSubmitBookmark);
+    $('.bookmarks').on('click', '.star-rating', handleSetRating);
+    $('body').on('click submit change', handleAllExceptBookmarkClick);
   };
 
   return {
