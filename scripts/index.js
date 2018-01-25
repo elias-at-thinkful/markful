@@ -1,8 +1,2 @@
-
-$('.bookmarks').append(templates.bookmark({
-  title: 'Something',
-  url: 'http://example.com',
-  rating: 4,
-  desc: 'Lorem ipsum etc',
-  id: 1
-}));
+const els = store.bookmarks.map(b => templates.bookmark(b));
+$('.bookmarks').html(els);

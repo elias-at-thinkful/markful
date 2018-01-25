@@ -3,6 +3,10 @@ body {
   margin: 0 auto;
 }
 
+ul.bookmarks {
+  padding: 0;
+}
+
 li.bookmark-item {
   list-style-type: none;
   border-radius: 23px;
@@ -14,11 +18,16 @@ li.bookmark-item:first {
   margin-top: 0;
 }
 
-li header {
+li.bookmark-item header {
   background-color: lightblue;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
   height: 45px;
+  cursor: pointer;
+}
+
+p.description {
+  font-family: Arial, Helvetica, sans-serif; 
 }
 
 .header-text {
