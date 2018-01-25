@@ -1,8 +1,6 @@
 const store = (function(){
 
-  const bookmarks = [
-  ];
-
+  const bookmarks = [];
   let adding = false;
   let minimumRating = null;
 
