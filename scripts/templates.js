@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const templates = (function () {
 
   const _generateRating = function (num) {
@@ -19,32 +20,41 @@ const templates = (function () {
     }).join('');
   };
 
-  const addBookmarkForm = function() {
+  const bookmarkForm = function(bookmark = {}) {
+    const bookmarkKeys = Object.keys(bookmark);
+    if (bookmarkKeys.length === 0) {
+      bookmark.id = '';
+      bookmark.title = '';
+      bookmark.url = '';
+      bookmark.desc = '';
+      bookmark.rating = '';
+    }
+
     return `
-      <form id="add-bookmark-form">
+      <form id="bookmark-form" data-id="${bookmark.id}">
         <div class="form-group">
           <label for="input-title">Title</label>
-          <input type="text" name="title" id="input-title" />
+          <input type="text" name="title" id="input-title" value="${bookmark.title}" />
         </div>
         <div class="form-group">
           <label for="input-url">URL</label>
-          <input type="text" name="url" id="input-url" />
+          <input type="text" name="url" id="input-url" value="${bookmark.url}" />
         </div>
         <div class="form-group">
           <label for="input-description">Description</label>
-          <input type="text" name="description" id="input-description" />
+          <input type="text" name="desc" id="input-description" value="${bookmark.desc}" />
         </div>
         <div class="form-group">
           <h3>Rating</h3>
-          <input type="radio" id="rating-5" name="rating" value="5" checked="checked" /> <label for="rating-5">5</label>
-          <input type="radio" id="rating-4" name="rating" value="4" /> <label for="rating-4">4</label>
-          <input type="radio" id="rating-3" name="rating" value="3" /> <label for="rating-3">3</label>
-          <input type="radio" id="rating-2" name="rating" value="2" /> <label for="rating-2">2</label>
-          <input type="radio" id="rating-1" name="rating" value="1" /> <label for="rating-1">1</label>
+          <input type="radio" id="rating-5" name="rating" value="5" ${bookmark.rating === '' || bookmark.rating === 5 ? 'checked' : ''}/> <label for="rating-5">5</label>
+          <input type="radio" id="rating-4" name="rating" value="4" ${bookmark.rating === 4 ? 'checked' : ''}/> <label for="rating-4">4</label>
+          <input type="radio" id="rating-3" name="rating" value="3" ${bookmark.rating === 3 ? 'checked' : ''}/> <label for="rating-3">3</label>
+          <input type="radio" id="rating-2" name="rating" value="2" ${bookmark.rating === 2 ? 'checked' : ''}/> <label for="rating-2">2</label>
+          <input type="radio" id="rating-1" name="rating" value="1" ${bookmark.rating === 1 ? 'checked' : ''}/> <label for="rating-1">1</label>
         </div>
         <div class="form-group">
           <button type="submit">Save</button>
-          <button id="cancel-add-form" type="button">Cancel</button>
+          <button id="cancel-bookmark-form" type="button">Cancel</button>
         </div>
       </form>
     `;
@@ -75,7 +85,8 @@ const templates = (function () {
       <p class="description">
         ${desc}
         <span class="site-link"><a href="${url}">Visit Site</a></span>
-      </p>
+        ( <a class="edit-item" href="#">Edit</a> )
+        </p>
     ` : '';
 
     return `
@@ -97,7 +108,7 @@ const templates = (function () {
 
   return {
     bookmark,
-    addBookmarkForm,
+    bookmarkForm,
     defaultControls,
   };
 }());

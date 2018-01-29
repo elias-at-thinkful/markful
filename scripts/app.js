@@ -1,4 +1,4 @@
-/* global store, templates */
+/* global store, templates, api */
 
 // eslint-disable-next-line no-unused-vars
 const app = (function(){
@@ -25,10 +25,22 @@ const app = (function(){
 
   const handleSubmitBookmark = function(e) {
     e.preventDefault();
-    const formInputs = $('#add-bookmark-form').serialize();
+    const id = $(e.target).data('id');
+    const formInputs = $('#bookmark-form').serialize();
     const bookmark = _queryToObject(formInputs);
-    store.addBookmark(bookmark);
-    render();
+
+    if (id) {
+      api.patchBookmark(id, bookmark, () => {
+        store.updateBookmark(id, bookmark);
+        store.editing = null;
+        render();
+      });      
+    } else {
+      api.postBookmark(bookmark, res => {
+        store.addBookmark(res);
+        render();
+      });
+    }
   };
 
   const handleClickAddBookmark = function() {
@@ -41,6 +53,11 @@ const app = (function(){
     render();
   };
 
+  const handleClickEditBookmark = function(e) {
+    store.editing = $(e.target).closest('li').data('id');
+    render();
+  };
+
   const handleChangeRatingFilter = function() {
     const rating = Number($('#rating-filter').val());
     store.minimumRating = isNaN(rating) ? 1 : rating;
@@ -50,13 +67,14 @@ const app = (function(){
   const handleSetRating = function(e) {
     const id = $(e.target).closest('li').data('id');
     const rating = $(e.target).data('rating');
-    store.updateBookmark(id, { rating });
-    store.lastClickedBookmark = id;
-    render();
+    api.patchBookmark(id, { rating }, () => {
+      store.updateBookmark(id, { rating });
+      render();
+    });
   };
 
   const handleAllExceptBookmarkClick = function(e) {
-    if (!$(e.target).closest('li.bookmark-item')[0]) {
+    if (!$(e.target).closest('li.bookmark-item')[0] || $(e.target).hasClass('edit-item')) {
       store.lastClickedBookmark = null;
     }
   };
@@ -65,7 +83,12 @@ const app = (function(){
     let el = templates.defaultControls(store.minimumRating);
 
     if (store.adding) {
-      el = templates.addBookmarkForm();
+      el = templates.bookmarkForm();
+    }
+
+    if (store.editing) {
+      const bookmark = store.findBookmarkById(store.editing);
+      el = templates.bookmarkForm(bookmark);
     }
 
     $('.bookmark-controls').html(el);
@@ -96,11 +119,12 @@ const app = (function(){
   const bindEventListeners = function() {
     $('.bookmarks').on('click', '.bookmark-item header', handleClickBookmark);
     $('.bookmark-controls').on('click', '#show-add-form', handleClickAddBookmark);
-    $('.bookmark-controls').on('click', '#cancel-add-form', handleCancelAddBookmark);
+    $('.bookmark-controls').on('click', '#cancel-bookmark-form', handleCancelAddBookmark);
     $('.bookmark-controls').on('change', '#rating-filter', handleChangeRatingFilter);
-    $('.bookmark-controls').on('submit', '#add-bookmark-form', handleSubmitBookmark);
+    $('.bookmark-controls').on('submit', '#bookmark-form', handleSubmitBookmark);
     $('.bookmarks').on('click', '.star-rating', handleSetRating);
     $('.bookmark-controls, .bookmarks-list').on('click submit', handleAllExceptBookmarkClick);
+    $('.bookmarks').on('click', '.edit-item', handleClickEditBookmark);
   };
 
   return {

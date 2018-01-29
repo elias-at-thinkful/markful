@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 const store = (function(){
 
   const bookmarks = [];
   let adding = false;
+  let editing = null;
   let minimumRating = null;
   let lastClickedBookmark = null;
 
@@ -31,6 +33,7 @@ const store = (function(){
   return {
     bookmarks,
     adding,
+    editing,
     minimumRating,
     lastClickedBookmark,
     
