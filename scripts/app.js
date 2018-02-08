@@ -50,6 +50,7 @@ const app = (function(){
 
   const handleCancelAddBookmark = function() {
     store.adding = false;
+    store.editing = null;
     render();
   };
 
