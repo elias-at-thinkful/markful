@@ -1,4 +1,5 @@
 /* global app, store, api */
+'use strict';
 
 $(() => {
   app.bindEventListeners();
@@ -7,6 +8,3 @@ $(() => {
     app.render();
   });
 });
-
-
-

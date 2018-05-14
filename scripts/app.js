@@ -1,7 +1,8 @@
 /* global store, templates, api */
+'use strict';
 
 // eslint-disable-next-line no-unused-vars
-const app = (function(){
+const app = (function() {
   const _queryToObject = function(query) {
     const pairs = query.split('&');
     const res = {};
@@ -9,7 +10,7 @@ const app = (function(){
       pair = pair.split('=');
       if (pair[0] === 'rating') {
         const val = Number(decodeURIComponent(pair[1]));
-        return res[pair[0]] = val;
+        return (res[pair[0]] = val);
       }
       res[pair[0]] = decodeURIComponent(pair[1] || '');
     });
@@ -17,7 +18,9 @@ const app = (function(){
   };
 
   const handleClickBookmark = function(e) {
-    const id = $(e.target).closest('li').data('id');
+    const id = $(e.target)
+      .closest('li')
+      .data('id');
     store.toggleBookmarkExpand(id);
     store.lastClickedBookmark = id;
     render();
@@ -34,7 +37,7 @@ const app = (function(){
         store.updateBookmark(id, bookmark);
         store.editing = null;
         render();
-      });      
+      });
     } else {
       api.postBookmark(bookmark, res => {
         store.addBookmark(res);
@@ -55,7 +58,9 @@ const app = (function(){
   };
 
   const handleClickEditBookmark = function(e) {
-    store.editing = $(e.target).closest('li').data('id');
+    store.editing = $(e.target)
+      .closest('li')
+      .data('id');
     render();
   };
 
@@ -66,7 +71,9 @@ const app = (function(){
   };
 
   const handleSetRating = function(e) {
-    const id = $(e.target).closest('li').data('id');
+    const id = $(e.target)
+      .closest('li')
+      .data('id');
     const rating = $(e.target).data('rating');
     api.patchBookmark(id, { rating }, () => {
       store.updateBookmark(id, { rating });
@@ -75,7 +82,10 @@ const app = (function(){
   };
 
   const handleAllExceptBookmarkClick = function(e) {
-    if (!$(e.target).closest('li.bookmark-item')[0] || $(e.target).hasClass('edit-item')) {
+    if (
+      !$(e.target).closest('li.bookmark-item')[0] ||
+      $(e.target).hasClass('edit-item')
+    ) {
       store.lastClickedBookmark = null;
     }
   };
@@ -98,7 +108,9 @@ const app = (function(){
   const _renderBookmarkList = function() {
     let viewBookmarks = store.bookmarks;
     if (store.minimumRating && store.minimumRating > 1) {
-      viewBookmarks = viewBookmarks.filter(b => b.rating >= store.minimumRating);
+      viewBookmarks = viewBookmarks.filter(
+        b => b.rating >= store.minimumRating
+      );
     }
 
     const els = viewBookmarks.map(b => templates.bookmark(b));
@@ -107,7 +119,7 @@ const app = (function(){
     setTimeout(() => {
       if (store.lastClickedBookmark) {
         const el = $(`.bookmark-item#bookmark-${store.lastClickedBookmark}`);
-        el[0].scrollIntoView({behavior: 'instant', block: 'start'});
+        el[0].scrollIntoView({ behavior: 'instant', block: 'start' });
       }
     }, 1);
   };
@@ -119,17 +131,36 @@ const app = (function(){
 
   const bindEventListeners = function() {
     $('.bookmarks').on('click', '.bookmark-item header', handleClickBookmark);
-    $('.bookmark-controls').on('click', '#show-add-form', handleClickAddBookmark);
-    $('.bookmark-controls').on('click', '#cancel-bookmark-form', handleCancelAddBookmark);
-    $('.bookmark-controls').on('change', '#rating-filter', handleChangeRatingFilter);
-    $('.bookmark-controls').on('submit', '#bookmark-form', handleSubmitBookmark);
+    $('.bookmark-controls').on(
+      'click',
+      '#show-add-form',
+      handleClickAddBookmark
+    );
+    $('.bookmark-controls').on(
+      'click',
+      '#cancel-bookmark-form',
+      handleCancelAddBookmark
+    );
+    $('.bookmark-controls').on(
+      'change',
+      '#rating-filter',
+      handleChangeRatingFilter
+    );
+    $('.bookmark-controls').on(
+      'submit',
+      '#bookmark-form',
+      handleSubmitBookmark
+    );
     $('.bookmarks').on('click', '.star-rating', handleSetRating);
-    $('.bookmark-controls, .bookmarks-list').on('click submit', handleAllExceptBookmarkClick);
+    $('.bookmark-controls, .bookmarks-list').on(
+      'click submit',
+      handleAllExceptBookmarkClick
+    );
     $('.bookmarks').on('click', '.edit-item', handleClickEditBookmark);
   };
 
   return {
     render,
-    bindEventListeners,
+    bindEventListeners
   };
-}());
+})();

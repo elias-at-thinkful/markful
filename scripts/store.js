@@ -1,6 +1,7 @@
-// eslint-disable-next-line no-unused-vars
-const store = (function(){
+'use strict';
 
+// eslint-disable-next-line no-unused-vars
+const store = (function() {
   const bookmarks = [];
   let adding = false;
   let editing = null;
@@ -36,10 +37,10 @@ const store = (function(){
     editing,
     minimumRating,
     lastClickedBookmark,
-    
+
     addBookmark,
     findBookmarkById,
     toggleBookmarkExpand,
-    updateBookmark,
+    updateBookmark
   };
-}());
+})();
