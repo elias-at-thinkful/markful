@@ -30,12 +30,30 @@ const templates = (function() {
 
   const bookmarkForm = function(bookmark = {}) {
     const bookmarkKeys = Object.keys(bookmark);
+    let radioGroupHTML = '';
+    function _generateRadioGroupHTML(bookmark, idx) {
+      return `
+        <input
+          type="radio"
+          id="rating-${idx}"
+          name="rating"
+          value="${idx}"
+          ${bookmark.rating === idx ? 'checked' : ''}
+        />
+        <label for="rating-${idx}">${idx}</label>
+      `;
+    }
+
     if (bookmarkKeys.length === 0) {
       bookmark.id = '';
       bookmark.title = '';
       bookmark.url = '';
       bookmark.desc = '';
       bookmark.rating = '';
+    }
+
+    for (let i = 1; i <= 5; i += 1) {
+      radioGroupHTML += _generateRadioGroupHTML(bookmark, i);
     }
 
     return `
@@ -64,48 +82,11 @@ const templates = (function() {
             id="input-description" 
             value="${bookmark.desc}" />
         </div>
-        <div class="form-group">
-          <h3>Rating</h3>
-          <input 
-            type="radio" 
-            id="rating-5" 
-            name="rating" 
-            value="5" 
-            ${bookmark.rating === '' || bookmark.rating === 5 ? 'checked' : ''}
-          /> 
-          <label for="rating-5">5</label>
-          <input 
-            type="radio" 
-            id="rating-4" 
-            name="rating" 
-            value="4" 
-            ${bookmark.rating === 4 ? 'checked' : ''}
-          />
-          <label for="rating-4">4</label>
-          <input 
-            type="radio" 
-            id="rating-3" 
-            name="rating" 
-            value="3" 
-            ${bookmark.rating === 3 ? 'checked' : ''}
-          />
-          <label for="rating-3">3</label>
-          <input 
-            type="radio" 
-            id="rating-2" 
-            name="rating" 
-            value="2"
-            ${bookmark.rating === 2 ? 'checked' : ''}
-          /> 
-          <label for="rating-2">2</label>
-          <input 
-            type="radio" 
-            id="rating-1" 
-            name="rating" 
-            value="1"
-            ${bookmark.rating === 1 ? 'checked' : ''}
-          />
-          <label for="rating-1">1</label>
+        <fieldset class="form-group">
+          <legend>
+            <h3>Rating</h3>
+          </legend>
+          ${radioGroupHTML}
         </div>
         <div class="form-group">
           <button type="submit">Save</button>
@@ -116,6 +97,31 @@ const templates = (function() {
   };
 
   const defaultControls = function(minimumRating) {
+    let optionHTML = '';
+    function _generateOptionHTML(idx) {
+      if (idx === 0) {
+        return `
+        <option
+          ${minimumRating === null ? 'selected' : ''}
+          value="null"
+        >
+          Choose minimum rating
+        </option>
+      `;
+      }
+      return `
+        <option
+          ${minimumRating === idx ? 'selected' : ''}
+          value="${idx}"
+        >
+          ${idx}
+        </option>
+      `;
+    }
+    for (let i = 0; i < 6; i += 1) {
+      optionHTML += _generateOptionHTML(i);
+    }
+
     return `
       <section class="default-controls">
         <div class="control">
@@ -123,42 +129,7 @@ const templates = (function() {
           </div>
           <div class="control">
             <select id="rating-filter" name="rating-filter">
-              <option 
-              ${minimumRating === null ? 'selected' : ''}
-              value="null"
-            >
-              Choose Minimum Rating
-            </option>
-              <option
-                ${minimumRating === 5 ? 'selected' : ''}
-                value="5"
-              >
-                5
-              </option>
-              <option
-                ${minimumRating === 4 ? 'selected' : ''}
-                value="4"
-              >
-                4
-              </option>
-              <option
-                ${minimumRating === 3 ? 'selected' : ''}
-                value="3"
-              >
-                3
-              </option>
-              <option
-                ${minimumRating === 2 ? 'selected' : ''}
-                value="2"
-              >
-                2
-              </option>
-              <option
-                ${minimumRating === 1 ? 'selected' : ''}
-                value="1"
-              >
-                1
-              </option>
+              ${optionHTML}
             </select>
           </div>
       </section>
